@@ -1,66 +1,60 @@
 // screens/signup_success_screen.dart
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:task/screens/dashboard_screen.dart';
+import 'dashboard_screen.dart';
 
-class SignUpSuccessScreen extends StatefulWidget {
+class SignUpSuccessScreen extends StatelessWidget {
   const SignUpSuccessScreen({super.key});
-
-  @override
-  State<SignUpSuccessScreen> createState() => _SignUpSuccessScreenState();
-}
-
-class _SignUpSuccessScreenState extends State<SignUpSuccessScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _navigateToDashboard();
-  }
-
-  void _navigateToDashboard() {
-    // Wait for 4 seconds, then navigate to Dashboard and clear the stack
-    Future.delayed(const Duration(seconds: 4), () {
-      if (mounted) { // Ensure the widget is still in the tree
-        Get.offAll(() => const DashboardScreen());
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // As requested, set the background color to red
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Your Lottie animation
-            Lottie.asset(
-              'assets/task3.json',
-              width: 250,
-              height: 250,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Account Created!',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 100,
               ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Redirecting to the shop...',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white70,
+              const SizedBox(height: 20),
+              const Text(
+                "Account Created Successfully!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  // Go to dashboard after signup
+                  Get.offAll(() => const DashboardScreen());
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 14,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "Continue",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

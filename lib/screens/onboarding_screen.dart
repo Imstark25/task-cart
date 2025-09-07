@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:task/screens/user_check_screen.dart'; // Import the new user check screen
+import 'package:task/screens/user_check_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -45,7 +45,6 @@ class OnboardingScreen extends StatelessWidget {
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to the UserCheckScreen to decide the next step
                   Get.offAll(() => UserCheckScreen());
                 },
                 style: ElevatedButton.styleFrom(

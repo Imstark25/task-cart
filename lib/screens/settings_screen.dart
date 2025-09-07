@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0EFEF), // Match cart background for consistency
+      backgroundColor: const Color(0xFFF0EFEF),
       body: Obx(() {
         if (authController.firestoreUser.value == null) {
           return const Center(child: CircularProgressIndicator());
@@ -22,11 +22,10 @@ class SettingsScreen extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            // User Profile Header
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.white, // White background for the card
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -41,7 +40,7 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundColor: Theme.of(context).colorScheme.primary, // Themed color
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     child: const Icon(Icons.person, size: 60, color: Colors.white),
                   ),
                   const SizedBox(height: 16),
@@ -66,7 +65,6 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Settings Options
             _buildSettingsTile(
               context,
               icon: Icons.manage_accounts,
@@ -93,7 +91,6 @@ class SettingsScreen extends StatelessWidget {
             ),
             const Divider(height: 40),
 
-            // Logout Button
             _buildSettingsTile(
               context,
               icon: Icons.logout,
@@ -106,10 +103,11 @@ class SettingsScreen extends StatelessWidget {
                   textConfirm: "Yes, Logout",
                   textCancel: "Cancel",
                   confirmTextColor: Colors.white,
-                  buttonColor: Get.theme.colorScheme.primary, // Yellow confirm button
+                  buttonColor: Get.theme.colorScheme.primary,
                   cancelTextColor: Colors.black54,
                   onConfirm: () {
-                    authController.signOut();
+                    Get.back(); // Close the dialog first
+                    authController.signOut(); // Then call signout
                   },
                 );
               },
@@ -133,7 +131,7 @@ class SettingsScreen extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           icon,
-          color: isLogout ? Colors.red.shade400 : Theme.of(context).colorScheme.primary, // Themed color
+          color: isLogout ? Colors.red.shade400 : Theme.of(context).colorScheme.primary,
         ),
         title: Text(
           title,

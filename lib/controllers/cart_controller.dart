@@ -2,43 +2,35 @@
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart'; // Needed for Snackbar
+import 'package:flutter/material.dart';
 import '../ model/cart_item_model.dart';
 import '../ model/product_model.dart';
-
 
 class CartController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final cartItems = <CartItem>[].obs;
-  // Get the current user nullable - note: this should ideally be handled via AuthController
-  // For now, keeping it here as it was, but a full app would use authController.user.value
-  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   void onInit() {
     super.onInit();
-    if (user != null) {
-      cartItems.bindStream(fetchUserCartStream());
-    } else {
-      print('No user logged in. Cart will not be synced.');
-    }
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        cartItems.bindStream(fetchUserCartStream(user.uid));
+      } else {
+        cartItems.clear();
+      }
+    });
   }
 
-  // Separate function to get the cart stream
-  Stream<List<CartItem>> fetchUserCartStream() {
-    // Re-check user because this might be called later
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      return _firestore
-          .collection('users')
-          .doc(currentUser.uid)
-          .collection('cart')
-          .snapshots()
-          .map((snapshot) {
-        return snapshot.docs.map((doc) => CartItem.fromMap(doc.data())).toList();
-      });
-    }
-    return const Stream.empty(); // Return an empty stream if no user
+  Stream<List<CartItem>> fetchUserCartStream(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('cart')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => CartItem.fromMap(doc.data())).toList();
+    });
   }
 
   double get total =>
@@ -49,8 +41,8 @@ class CartController extends GetxController {
       'Login Required',
       'You must be logged in to use the cart.',
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Get.theme.colorScheme.error, // Use theme color
-      colorText: Get.theme.colorScheme.onError, // Use theme color
+      backgroundColor: Get.theme.colorScheme.error,
+      colorText: Get.theme.colorScheme.onError,
       margin: const EdgeInsets.all(12),
     );
   }
@@ -85,8 +77,8 @@ class CartController extends GetxController {
       'Added to Cart',
       '${product.name} added to your bag!',
       snackPosition: SnackPosition.TOP,
-      backgroundColor: Get.theme.colorScheme.primary, // Use theme color
-      colorText: Get.theme.colorScheme.onPrimary, // Use theme color
+      backgroundColor: Get.theme.colorScheme.primary,
+      colorText: Get.theme.colorScheme.onPrimary,
       margin: const EdgeInsets.all(12),
     );
   }
@@ -108,11 +100,9 @@ class CartController extends GetxController {
       await cartDocRef.update({'quantity': FieldValue.increment(-1)});
     } else {
       await cartDocRef.delete();
-      Get.snackbar('Removed', '${item.name} removed from bag!');
     }
   }
 
-  // This method is for completely removing an item (e.g., via a "swipe-to-delete")
   Future<void> removeItemCompletely(CartItem item) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {

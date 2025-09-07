@@ -4,14 +4,14 @@ class CartItem {
   final String name;
   final double price;
   final int quantity;
-  final String imageUrl; // ADDED THIS LINE
+  final String imageUrl;
 
   CartItem({
     required this.productId,
     required this.name,
     required this.price,
     required this.quantity,
-    required this.imageUrl, // ADDED THIS LINE
+    required this.imageUrl,
   });
 
   factory CartItem.fromMap(Map<String, dynamic> data) {
@@ -20,7 +20,7 @@ class CartItem {
       name: data['name'] as String,
       price: (data['price'] as num).toDouble(),
       quantity: data['quantity'] as int,
-      imageUrl: data['imageUrl'] ?? '', // ADDED THIS LINE (with fallback)
+      imageUrl: data['imageUrl'] ?? '',
     );
   }
 
@@ -30,7 +30,7 @@ class CartItem {
       'name': name,
       'price': price,
       'quantity': quantity,
-      'imageUrl': imageUrl, // ADDED THIS LINE
+      'imageUrl': imageUrl,
     };
   }
 }

@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:task/screens/dashboard_screen.dart';
-import 'package:task/screens/logout_success_screen.dart'; // <-- IMPORT NEW SCREEN
 import 'package:task/screens/signup_success_screen.dart';
-import 'package:task/screens/user_check_screen.dart';
+import 'package:task/screens/signup_screen.dart';
 
-import '../ model/user_model.dart';
+import '../ model/user_model.dart'; // 👈 Add signup screen import
+
+
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,11 +47,15 @@ class AuthController extends GetxController {
     return const Stream.empty();
   }
 
-  Future<void> signUp(String name, String email, String phoneNumber, String password) async {
+  /// SIGN UP
+  Future<void> signUp(
+      String name, String email, String phoneNumber, String password) async {
     try {
-      Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
+      Get.dialog(const Center(child: CircularProgressIndicator()),
+          barrierDismissible: false);
 
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+      await _auth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
@@ -64,40 +69,48 @@ class AuthController extends GetxController {
       }
 
       Get.back(); // Close loading dialog
-      Get.offAll(() => SignUpSuccessScreen()); // Navigate to signup success
-
+      Get.offAll(() => const SignUpSuccessScreen());
     } on FirebaseAuthException catch (e) {
       Get.back();
-      Get.snackbar('Sign Up Failed', e.message ?? 'An unknown error occurred.',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Get.theme.colorScheme.error,
-          colorText: Get.theme.colorScheme.onError);
+      Get.snackbar(
+        'Sign Up Failed',
+        e.message ?? 'An unknown error occurred.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.error,
+        colorText: Get.theme.colorScheme.onError,
+      );
     }
   }
 
+  /// LOGIN
   Future<void> login(String email, String password) async {
     try {
-      Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
+      Get.dialog(const Center(child: CircularProgressIndicator()),
+          barrierDismissible: false);
+
       await _auth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
-      Get.back(); // Close loading dialog
-      Get.offAll(() => const DashboardScreen()); // Navigate to dashboard
 
+      Get.back();
+      Get.offAll(() => const DashboardScreen());
     } on FirebaseAuthException catch (e) {
       Get.back();
-      Get.snackbar('Login Failed', e.message ?? 'An unknown error occurred.',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Get.theme.colorScheme.error,
-          colorText: Get.theme.colorScheme.onError);
+      Get.snackbar(
+        'Login Failed',
+        e.message ?? 'An unknown error occurred.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.error,
+        colorText: Get.theme.colorScheme.onError,
+      );
     }
   }
 
-  // *** UPDATED THIS METHOD ***
+  /// SIGN OUT
   Future<void> signOut() async {
     await _auth.signOut();
-    // Navigate to the new logout success screen instead of UserCheckScreen
-    Get.offAll(() => const LogoutSuccessScreen());
+    // 👇 Go directly to signup page
+    Get.offAll(() => SignUpScreen());
   }
 }

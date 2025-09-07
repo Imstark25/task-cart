@@ -1,3 +1,4 @@
+// screens/dashboard_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task/screens/product_list_screen.dart';
@@ -25,7 +26,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   static const List<Text> _appBarTitles = [
     Text('Products'),
-    Text('My Cart'),
+    Text('My Bag'),
     Text('Settings'),
   ];
 
@@ -50,20 +51,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _appBarTitles.elementAt(_selectedIndex),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: Container(
-        color: const Color(0xFFF5F5F4),
-        child: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // ✅ prevents shifting
-        backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag_outlined),
@@ -82,11 +75,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFF6366F1), // Indigo accent
+        selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
-        elevation: 12,
-        showUnselectedLabels: true,
       ),
     );
   }

@@ -1,4 +1,4 @@
-// model/user_model.dart
+// lib/model/user_model.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
@@ -14,7 +14,6 @@ class UserModel {
     required this.phoneNumber,
   });
 
-  // Factory constructor to create a UserModel from a Firestore document
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return UserModel(
