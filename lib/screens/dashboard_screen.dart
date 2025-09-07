@@ -25,7 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   static const List<Text> _appBarTitles = [
     Text('Products'),
-    Text('My cart'),
+    Text('My Cart'),
     Text('Settings'),
   ];
 
@@ -50,8 +50,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _appBarTitles.elementAt(_selectedIndex),
-        backgroundColor: const Color(0xFFF5F5F4),
-        foregroundColor: const Color(0xFF292524),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
@@ -62,7 +62,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFFF5F5F4),
+        type: BottomNavigationBarType.fixed, // ✅ prevents shifting
+        backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag_outlined),
@@ -72,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart_outlined),
             activeIcon: Icon(Icons.shopping_cart),
-            label: 'cart',
+            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),
@@ -81,9 +82,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFFFFC107),
-        unselectedItemColor: const Color(0xFF6B7280),
+        selectedItemColor: const Color(0xFF6366F1), // Indigo accent
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
+        elevation: 12,
+        showUnselectedLabels: true,
       ),
     );
   }
