@@ -1,15 +1,16 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:task/screens/onboarding_screen.dart'; // Import the onboarding screen
 import 'firebase_options.dart';
+import 'controllers/auth_controller.dart'; // Import AuthController
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.put(AuthController()); // Register the AuthController
   runApp(const MyApp());
 }
 

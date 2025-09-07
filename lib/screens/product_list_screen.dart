@@ -9,38 +9,44 @@ class ProductListScreen extends StatelessWidget {
 
   ProductListScreen({super.key});
 
-  // Product Image
   Widget _buildProductImage(String imageUrl) {
+    Widget imageWidget;
     if (imageUrl.startsWith('http')) {
-      return Image.network(
+      imageWidget = Image.network(
         imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
-        height: 120, // smaller fixed height
+        height: 120,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
           return const Center(child: CircularProgressIndicator());
         },
         errorBuilder: (context, error, stackTrace) {
-          return const Center(child: Icon(Icons.broken_image, color: Colors.grey));
+          return const Center(
+              child: Icon(Icons.broken_image, color: Colors.grey));
         },
       );
     } else {
-      return Image.asset(
+      imageWidget = Image.asset(
         imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: 120,
         errorBuilder: (context, error, stackTrace) {
-          return const Center(child: Icon(Icons.image_not_supported, color: Colors.grey));
+          return const Center(
+              child: Icon(Icons.image_not_supported, color: Colors.grey));
         },
       );
     }
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      child: imageWidget,
+    );
   }
 
-  // Rating Stars
   Widget _buildRatingStars(double rating) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
         IconData icon = Icons.star_border;
         if (index < rating.floor()) {
@@ -48,32 +54,30 @@ class ProductListScreen extends StatelessWidget {
         } else if (index < rating) {
           icon = Icons.star_half;
         }
-        return Icon(icon, color: Colors.amber, size: 14);
+        return Icon(icon, color: const Color(0xFFFFC107), size: 14);
       }),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      appBar: AppBar(title: const Text("Products"), centerTitle: true),
       body: Obx(
             () => GridView.builder(
           padding: const EdgeInsets.all(12),
           itemCount: productController.products.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: (screenHeight > 700) ? 0.72 : 0.68, // responsive
+            childAspectRatio: 0.65, // Taller cards → no overflow
           ),
           itemBuilder: (context, index) {
             final product = productController.products[index];
             return Card(
-              elevation: 3,
+              elevation: 4,
               shadowColor: Colors.black26,
+              color: const Color(0xFFE7E5E4),
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -82,55 +86,59 @@ class ProductListScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildProductImage(product.imageUrl),
-                  Expanded( // prevents overflow
+                  Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
+                      child: SingleChildScrollView( // ensures no overflow
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
                               product.name,
                               style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF292524),
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          _buildRatingStars(product.rating),
-                          const SizedBox(height: 6),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '\$${product.price.toStringAsFixed(2)}',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 32,
-                                height: 32,
-                                child: ElevatedButton(
-                                  onPressed: () => cartController.addToCart(product),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(context).colorScheme.primary,
-                                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                                    shape: const CircleBorder(),
-                                    padding: EdgeInsets.zero,
+                            const SizedBox(height: 4),
+                            _buildRatingStars(product.rating),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '\$${product.price.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFFC107),
                                   ),
-                                  child: const Icon(Icons.add, size: 16),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                    onPressed: () =>
+                                        cartController.addToCart(product),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFFFC107),
+                                      foregroundColor: Colors.white,
+                                      shape: const CircleBorder(),
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                    child: const Icon(
+                                      Icons.add_shopping_cart,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

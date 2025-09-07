@@ -1,4 +1,3 @@
-// screens/dashboard_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task/screens/product_list_screen.dart';
@@ -18,27 +17,23 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
 
-  // Find/Put controllers
   final AuthController authController = Get.find<AuthController>();
   final ProductController productController = Get.put(ProductController());
   final CartController cartController = Get.put(CartController());
 
-  // Widget list is now an instance variable, not static
   late final List<Widget> _widgetOptions;
 
   static const List<Text> _appBarTitles = [
     Text('Products'),
-    Text('My Bag'),
+    Text('My cart'),
     Text('Settings'),
   ];
 
   @override
   void initState() {
     super.initState();
-    // Initialize the list here to pass the callback function
     _widgetOptions = <Widget>[
       ProductListScreen(),
-      // Pass the function to switch to tab 0 directly to the CartScreen
       CartScreen(onContinueShopping: () => _onItemTapped(0)),
       SettingsScreen(),
     ];
@@ -55,12 +50,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _appBarTitles.elementAt(_selectedIndex),
-        automaticallyImplyLeading: false, // Remove back button from AppBar
+        backgroundColor: const Color(0xFFF5F5F4),
+        foregroundColor: const Color(0xFF292524),
+        elevation: 0,
+        automaticallyImplyLeading: false,
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: Container(
+        color: const Color(0xFFF5F5F4),
+        child: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFFF5F5F4),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag_outlined),
@@ -70,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart_outlined),
             activeIcon: Icon(Icons.shopping_cart),
-            label: 'Bag',
+            label: 'cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_outlined),
@@ -79,8 +81,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: const Color(0xFFFFC107),
+        unselectedItemColor: const Color(0xFF6B7280),
         onTap: _onItemTapped,
       ),
     );

@@ -32,3 +32,5 @@ flutter:
   # Add the assets section and declare your assets folder
   assets:
     - assets/
+    - assets/task.json
+    - assets/task2.json

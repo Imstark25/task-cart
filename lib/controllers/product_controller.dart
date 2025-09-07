@@ -15,14 +15,14 @@ class ProductController extends GetxController {
     products.value = [
       Product(
         id: '1',
-        name: 'Classic Leather Jacket',
+        name: 'Classic Leather belt',
         price: 149.99,
         imageUrl: 'assets/belt.jpg',
         rating: 4.5,
       ),
       Product(
         id: '2',
-        name: 'Wireless Bluetooth Headphones',
+        name: 'Wireless Headphones',
         price: 89.50,
         imageUrl: 'assets/headphones.jpeg',
         rating: 3,
@@ -36,23 +36,23 @@ class ProductController extends GetxController {
       ),
       Product(
         id: '4',
-        name: 'Running Shoes (Unisex)',
+        name: 'Running Shoes',
         price: 75.25,
-        imageUrl: 'https://picsum.photos/seed/shoes/400/300',
+        imageUrl: 'assets/shoe.jpg',
         rating: 4.0,
       ),
       Product(
         id: '5',
-        name: 'Professional DSLR Camera',
+        name: 'DSLR Camera',
         price: 699.99,
-        imageUrl: 'https://picsum.photos/seed/camera/400/300',
+        imageUrl: 'assets/camera.jpg',
         rating: 4.9,
       ),
       Product(
         id: '6',
-        name: 'Organic Green Tea (50 bags)',
+        name: 'classic handbag',
         price: 15.99,
-        imageUrl: 'https://picsum.photos/seed/tea/400/300',
+        imageUrl: 'assets/handbag.jpg',
         rating: 4.7,
       ),
     ];
